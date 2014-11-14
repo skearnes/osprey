@@ -1,5 +1,7 @@
 from __future__ import print_function, absolute_import, division
 
+import numpy as np
+
 
 class BaseCVFactory(object):
     short_name = None
@@ -89,3 +91,14 @@ class StratifiedKFoldFactory(BaseCVFactory):
 
         return StratifiedKFold(y, n_folds=self.n_folds, shuffle=self.shuffle,
                                random_state=self.random_state)
+
+
+class DummyCVFactory(BaseCVFactory):
+    """
+    Dummy CV. Train/test on the entire dataset.
+    """
+    short_name = 'dummy'
+
+    def create(self, X, y):
+        indices = np.arange(len(X))
+        return ((indices, indices),)

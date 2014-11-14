@@ -48,7 +48,7 @@ FIELDS = {
     'trials':          ['uri', 'project_name'],
     'search_space':    dict,
     'strategy':        ['name', 'params'],
-    'cv':              (int, dict),
+    'cv':              (int, dict, type(None)),
     'scoring':         (str, type(None)),
 }
 
@@ -298,7 +298,10 @@ class Config(object):
 
     def cv(self, X, y=None):
         cv = self.get_section('cv')
-        if isinstance(cv, int):
+        if cv is None:
+            cv_name = 'dummy'
+            cv_params = {}
+        elif isinstance(cv, int):
             cv_name = 'kfold'
             cv_params = {'n_folds': cv}
         else:
